@@ -157,3 +157,46 @@ GROUP BY c.degree_id ;
 ############################## JOIN
 
 # Selezionare tutti gli studenti iscritti al Corso di Laurea in Economia
+
+SELECT *
+FROM degrees d 
+JOIN students s ON s.degree_id = d.id 
+WHERE d.department_id = 9
+; #l'id del corso di laurea in economia è uguale a 9
+
+# Selez. tutti i Corsi di Laurea Magistrale (level like "magistrale") del Dip. di Neuroscienze (id=7)
+
+SELECT d.id , d2.name, d2.level
+FROM departments d 
+JOIN degrees d2 ON d2.department_id = d.id 
+WHERE d2.`level` like "magistrale"
+AND d.id = 7;
+
+# Selezionare tutti i corsi in cui insegna Fulvio Amato (id=44)
+
+SELECT c.name
+FROM courses c
+JOIN course_teacher ct ON ct.course_id = c.id 
+JOIN teachers t ON t.id = ct.teacher_id 
+WHERE t.id = 44;
+
+
+/*
+ * Selezionare tutti gli studenti con i dati relativi al corso di laurea a cui sono iscritti 
+ * e il relativo dipartimento, in ordine alfabetico 
+ * per cognome e nome
+ */
+
+SELECT s.name , s.surname, d2.name , d.name 
+FROM departments d2
+JOIN degrees d ON d.department_id = d2.id 
+JOIN students s ON s.degree_id = d.id 
+ORDER BY s.name ASC;
+
+# Selezionare tutti i corsi di laurea con i relativi corsi e insegnanti
+
+SELECT d.name , c.name, t.name , t.surname
+FROM degrees d 
+JOIN courses c ON c.degree_id = d.id 
+JOIN course_teacher ct ON ct.course_id = c.id 
+JOIN teachers t ON ct.teacher_id = t.id ;
