@@ -200,3 +200,22 @@ FROM degrees d
 JOIN courses c ON c.degree_id = d.id 
 JOIN course_teacher ct ON ct.course_id = c.id 
 JOIN teachers t ON ct.teacher_id = t.id ;
+
+# Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (5)
+
+SELECT dep.name , t.name , t.surname , COUNT(t.id)
+FROM teachers t 
+JOIN course_teacher ct ON t.id = ct.teacher_id 
+JOIN courses c ON c.id = ct.course_id 
+JOIN degrees deg ON deg.id = c.degree_id 
+JOIN departments dep ON dep.id = deg.department_id 
+WHERE dep.id=5
+GROUP BY dep.name , t.name , t.surname ;
+
+# BONUS Selezionare per ogni studente quanti tentativi d’esame ha sostenuto per superare ciascuno dei suoi esami
+
+SELECT  e.`date` as "data appello", COUNT(e.`date`) as "conteggio appelli", s.name, s.surname
+FROM exams e 
+JOIN exam_student es ON es.exam_id = e.id 
+JOIN students s ON es.student_id = s.id 
+GROUP BY e.date, s.name, s.surname ;
