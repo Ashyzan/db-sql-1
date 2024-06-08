@@ -1,0 +1,159 @@
+USE db_university;
+
+# Selezionare tutti gli insegnanti
+
+SELECT *
+FROM teachers t ;
+
+# Selezionare tutti i capi di ogni dipartimento
+
+SELECT head_of_department 
+FROM departments d ;
+
+# Selezionare tutti i corsi di laurea magistrale
+
+SELECT c.id , c.name
+FROM degrees c 
+WHERE c.name like "%magistrale%";
+
+# Selezionare tutti gli studenti che hanno come nome Marco
+
+SELECT *
+FROM students s 
+WHERE s.name = "marco";
+
+# Selezionare tutti i corsi(insegnamenti) che valgono più o uguale a 12 crediti
+
+SELECT c.cfu, c.id, c.name 
+FROM courses c 
+WHERE c.cfu >= 12
+ORDER BY cfu ASC;
+
+# Selezionare tutti i corsi(insegnamenti) che valgono più di 10 crediti oppure meno di 5
+
+SELECT *
+FROM courses c 
+WHERE c.cfu < 5 OR c.cfu > 10 
+ORDER BY c.cfu ASC;
+
+# Selezionare tutti i corsi(insegnamenti) del primo semestre del primo anno di un qualsiasi corso di
+laurea
+
+SELECT *
+FROM courses c 
+WHERE c.period like "I semestre%" 
+AND c.`year` = 1
+ORDER BY c.id ASC;
+
+# Selezionare tutti i corsi(insegnamenti) che non hanno un sito web
+
+SELECT *
+FROM courses c 
+WHERE c.website IS NULL;
+
+# Selezionare tutti gli insegnanti che hanno un numero di telefono
+
+SELECT *
+FROM teachers t 
+WHERE t.phone IS NOT NULL;
+
+# Selezionare tutti gli studenti il cui nome inizia per "E".
+
+SELECT *
+FROM students s 
+WHERE s.name like "e%"
+ORDER BY s.name ASC;
+
+# Contare tutti gli insegnanti che iniziano con “E” (suggerimento: guardate l’operatore COUNT).
+
+SELECT COUNT(*)
+FROM teachers t 
+WHERE t.name like "e%";
+
+# Contare tutti gli insegnanti che non hanno un numero di telefono.
+
+SELECT COUNT(*)
+FROM teachers t 
+WHERE t.phone IS NULL;
+
+#########################
+
+# Selezionare tutti gli studenti nati nel 1990 (160)
+
+SELECT COUNT(*)
+FROM students s 
+WHERE s.date_of_birth BETWEEN "1990-01-01" AND "1990-12-31";
+
+# Selezionare tutti che valgono piu di 10 crediti (479)
+
+SELECT COUNT(*)
+FROM courses c 
+WHERE c.cfu > 10
+ORDER BY c.cfu ASC;
+
+# Selezionare tutti gli studenti che hanno più di 30 anni
+
+SELECT COUNT(*)
+FROM students s 
+WHERE s.date_of_birth < "1994-01-01";
+
+# Selezionare tutti i corsi del primo semestre del primo anno di un qualsiasi corso di laurea (286)
+
+SELECT COUNT(*)
+FROM courses c 
+WHERE c.period like "I semestre%" 
+AND c.`year` = 1
+ORDER BY c.id ASC;
+
+# Selezionare tutti gli appelli d'esame che avvengono nel pomeriggio (dopo le 14) del 20/06/2020 (21)
+
+SELECT COUNT(*)
+FROM exams e 
+WHERE e.`date` = "2020-06-20" AND e.`hour` > "14:00:00";
+
+# Selezionare tutti i corsi di laurea magistrale (38)
+
+SELECT COUNT(*)
+FROM degrees c 
+WHERE c.name like "%magistrale%";
+
+# Da quanti dipartimenti è composta l'università? (12)
+
+SELECT COUNT(*)
+FROM departments d;
+
+# Quanti sono gli insegnanti che non hanno un numero di telefono? (50)
+SELECT COUNT(*)
+FROM teachers t 
+WHERE t.phone IS NULL;
+
+########################### GROUP BY
+
+# Contare quanti iscritti ci sono stati ogni anno
+
+SELECT s.enrolment_date , COUNT(*)
+FROM students s 
+GROUP BY s.enrolment_date
+ORDER BY s.enrolment_date ASC;
+
+# Contare gli insegnanti che hanno l'ufficio nello stesso edificio
+
+SELECT t.office_address , COUNT(*)
+FROM teachers t 
+GROUP BY t.office_address ;
+
+# Calcolare la media dei voti di ogni appello d'esame
+
+SELECT es.exam_id , AVG(es.vote)
+FROM exam_student es
+GROUP BY exam_id;
+
+# Contare quanti corsi di laurea ci sono per ogni dipartimento
+
+SELECT c.degree_id , COUNT(degree_id)
+FROM courses c 
+GROUP BY c.degree_id ;
+
+############################## JOIN
+
+# Selezionare tutti gli studenti iscritti al Corso di Laurea in Economia
